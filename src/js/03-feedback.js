@@ -7,15 +7,18 @@ const refs = {
 };
 
 const TARGET_KEY = 'feedback-form-state';
-const formData = {};
+let formData = {};
 
 populateForm();
 
 refs.formEl.addEventListener('input', throttle(onFormInput, 1000));
 refs.formEl.addEventListener('submit', onFormSubmit);
 
-function onFormInput(e) {
-  formData[e.target.name] = e.target.value;
+function onFormInput() {
+  formData = {
+    email: refs.emailInputEl.value,
+    message: refs.textareaEl.value,
+  };
   localStorage.setItem(TARGET_KEY, JSON.stringify(formData));
 }
 
@@ -23,14 +26,11 @@ function populateForm() {
   const data = JSON.parse(localStorage.getItem(TARGET_KEY));
 
   if (data) {
-    if (data.email) {
-      formData.email = data.email;
-      refs.emailInputEl.value = formData.email;
-    }
-    if (data.message) {
-      formData.message = data.message;
-      refs.textareaEl.value = formData.message;
-    }
+    formData.email = data.email;
+    refs.emailInputEl.value = formData.email;
+
+    formData.message = data.message;
+    refs.textareaEl.value = formData.message;
   }
 }
 
